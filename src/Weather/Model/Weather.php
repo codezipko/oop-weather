@@ -10,6 +10,15 @@ class Weather
         3 => 'sun'
     ];
 
+    private $symbol = [
+        'Cloudy' => 'cloud',
+        'Scattered Showers' => 'cloud-sun-rain',
+        'Breezy' => 'wind',
+        'Partly Cloudy' => 'cloud-sun',
+        'Mostly Cloudy' => 'smog',
+        'Sunny' => 'sun'
+    ];
+
     /**
      * @var integer
      */
@@ -24,6 +33,11 @@ class Weather
      * @var int
      */
     protected $sky;
+
+    /**
+     * @var string
+     */
+    protected $text;
 
     /**
      * @var \DateTime
@@ -68,6 +82,8 @@ class Weather
     public function getSky(): int
     {
         return $this->sky;
+
+        return $this->map[$this->sky];
     }
 
     /**
@@ -76,6 +92,22 @@ class Weather
     public function setSky(int $sky): void
     {
         $this->sky = $sky;
+    }
+
+    /**
+     * @return string $text
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param string $text
+     */
+    public function setText(string $text): void
+    {
+        $this->text = $text;
     }
 
     /**
@@ -96,6 +128,10 @@ class Weather
 
     public function getSkySymbol()
     {
-        return $this->map[$this->sky];
+        if(is_null($this->getText())) {
+            return $this->map[$this->sky];
+        } else {
+            return $this->symbol[$this->text];
+        }
     }
 }

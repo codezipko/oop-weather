@@ -17,10 +17,19 @@ class Manager
     {
         return $this->getTransporter()->selectByDate(new \DateTime());
     }
+    public function getTodayWeatherInfo(): Weather
+    {
+        return $this->getTransporter()->selectWeatherByDate(new \DateTime());
+    }
 
     public function getWeekInfo(): array
     {
         return $this->getTransporter()->selectByRange(new \DateTime('midnight'), new \DateTime('+6 days midnight'));
+    }
+
+    public function getWeekWeatherInfo(): array
+    {
+        return $this->getTransporter()->selectByRangeWeather(new \DateTime(), new \DateTime('+6 days'));
     }
 
     private function getTransporter()

@@ -18,4 +18,5 @@ interface DataProvider
      * @return array
      */
     public function selectByRange(\DateTime $from, \DateTime $to): array;
+
 }

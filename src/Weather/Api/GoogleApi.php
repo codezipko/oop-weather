@@ -4,6 +4,7 @@ namespace Weather\Api;
 
 use Weather\Model\NullWeather;
 use Weather\Model\Weather;
+use Weather\Api\DbRepository;
 
 class GoogleApi
 {
@@ -17,6 +18,20 @@ class GoogleApi
         $today->setDate(new \DateTime());
 
         return $today;
+    }
+
+    /**
+     * @param Weather $before
+     * @throws \Exception
+     */
+
+    public function getWeek() {
+
+        $range = new DbRepository;
+        $week = $range->selectByRange(new \DateTime('midnight'), new \DateTime('+6 days midnight'));
+
+        return $week;
+
     }
 
     /**

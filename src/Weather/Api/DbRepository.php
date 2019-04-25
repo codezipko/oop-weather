@@ -60,4 +60,50 @@ class DbRepository implements DataProvider
 
         return $result;
     }
+
+    public function selectWeatherByDate(\DateTime $date): Weather
+    {
+        $items = $this->selectAllFromWeather();
+        $result = new NullWeather();
+
+        foreach ($items as $item) {
+            if ($item->getDate()->format('Y-m-d') === $date->format('Y-m-d')) {
+                $result = $item;
+            }
+        }
+
+        return $result;
+    }
+    public function selectByRangeWeather(\DateTime $from, \DateTime $to): array
+    {
+        $items = $this->selectAllFromWeather();
+        $result = [];
+
+        foreach ($items as $item) {
+            if ($item->getDate() >= $from && $item->getDate() <= $to) {
+                $result[] = $item;
+            }
+        }
+
+        return $result;
+    }
+
+    public function selectAllFromWeather(): array
+    {
+        $result = [];
+        $data = json_decode(
+            file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'Db' . DIRECTORY_SEPARATOR . 'Weather.json'),
+            true
+        );
+        foreach ($data as $item) {
+            $record = new Weather();
+            $record->setDate(new \DateTime($item['date']));
+            $record->setDayTemp($item['high']);
+            $record->setNightTemp($item['low']);
+            $record->setText($item['text']);
+            $result[] = $record;
+        }
+
+        return $result;
+    }
 }

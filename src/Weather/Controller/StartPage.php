@@ -2,32 +2,26 @@
 
 namespace Weather\Controller;
 
-use Weather\Manager;
-use Weather\Model\NullWeather;
+use Weather\FilterWeatherDisplay;
+
 
 class StartPage
 {
+    use FilterWeatherDisplay;
+
     public function getTodayWeather(): array
     {
-        try {
-            $service = new Manager();
-            $weather = $service->getTodayInfo();
-        } catch (\Exception $exp) {
-            $weather = new NullWeather();
-        }
+        // Get Today Weathers from Filter Trait
+        $weather = $this->getTodayDisplay();
 
-        return ['template' => 'today-weather.twig', 'context' => ['weather' => $weather]];
+        return view('today-weather', compact('weather'));
     }
 
     public function getWeekWeather(): array
     {
-        try {
-            $service = new Manager();
-            $weathers = $service->getWeekInfo();
-        } catch (\Exception $exp) {
-            $weathers = [];
-        }
+        // Get Week Weathers from Filter Trait
+        $weathers = $this->getWeekDisplay();
 
-        return ['template' => 'range-weather.twig', 'context' => ['weathers' => $weathers]];
+        return view('range-weather', compact('weathers'));
     }
 }
