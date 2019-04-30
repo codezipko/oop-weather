@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 class RequestRouter
 {
 
-    public static function uri()
+    public function uri()
     {
         $request = Request::createFromGlobals();
 
@@ -15,12 +15,5 @@ class RequestRouter
         parse_url($request->getRequestUri(), PHP_URL_PATH), strlen($request->getBasePath()) + 1
         );
 
-    }
-
-    public static function method()
-    {
-        $request = Request::createFromGlobals();
-
-        return $request->getMethod();
     }
 }

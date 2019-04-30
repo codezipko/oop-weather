@@ -2,26 +2,28 @@
 
 namespace Weather\Controller;
 
+use http\Client\Request;
 use Weather\FilterWeatherDisplay;
-
 
 class StartPage
 {
-    use FilterWeatherDisplay;
 
     public function getTodayWeather(): array
     {
-        // Get Today Weathers from Filter Trait
-        $weather = $this->getTodayDisplay();
+        $weatherClass = new FilterWeatherDisplay;
 
-        return view('today-weather', compact('weather'));
+        $weather = $weatherClass->todayWeather();
+
+        return ['template' => 'today-weather.twig', 'context' => ['weather' => $weather]];
     }
 
     public function getWeekWeather(): array
     {
-        // Get Week Weathers from Filter Trait
-        $weathers = $this->getWeekDisplay();
 
-        return view('range-weather', compact('weathers'));
+        $weatherClass = new FilterWeatherDisplay;
+
+        $weathers = $weatherClass->weekWeathers();
+
+        return ['template' => 'range-weather.twig', 'context' => ['weathers' => $weathers]];
     }
 }

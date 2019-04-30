@@ -2,44 +2,22 @@
 
 namespace Router;
 
-
 class Router {
-    public $routes = [
-        'GET'	=> [],
-        'POST'	=> []
-    ];
-    public static function load($file) {
-        $router = new static;
-        require $file;
-        return $router;
-    }
-    public function get($uri, $controller) {
-        $this->routes['GET'][$uri] = $controller;
-    }
-    public function post($uri, $controller) {
-        $this->routes['POST'][$uri] = $controller;
+
+    public $routes = [];
+
+    public function router($action, $callback)
+    {
+        $action = trim($action, '/');
+        $this->routes[$action] = $callback;
     }
 
-    public function direct($uri, $requestType) {
-        if (array_key_exists($uri, $this->routes[$requestType])) {
+    public function dispatchRouter($action)
+    {
+        $action = trim($action, '/');
+        $callback = $this->routes[$action];
 
-            return $this->callACtion(
-                ...explode('@', $this->routes[$requestType][$uri])
-            );
-        }
-        throw new \Exception('No routes define for this url...');
+        return call_user_func($callback);
     }
-    protected function callACtion($controller, $action) {
 
-
-        $controller = "Weather\\Controller\\{$controller}";
-        $controller = new $controller;
-        if (! method_exists($controller, $action)) {
-            throw new Exception(
-                "{$controller} does not respond to the {$action} action."
-            );
-
-        }
-        return $controller->$action();
-    }
 }
